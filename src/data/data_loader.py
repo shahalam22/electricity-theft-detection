@@ -14,10 +14,10 @@ class SGCCDataLoader:
     SGCC Dataset Loader for Electricity Theft Detection
     
     The SGCC dataset contains:
-    - 42,372 smart meter users
-    - 1,035 days of consumption data (2014-2016)
-    - ~8.5% theft cases (3,615 users)
-    - ~25.64% missing data rate
+    - Smart meter consumption data in wide format
+    - Daily consumption columns (dates as headers)
+    - CONS_NO: Meter identifier
+    - FLAG: 0=normal, 1=theft
     """
     
     def __init__(self, data_path: Optional[str] = None):
@@ -61,157 +61,86 @@ class SGCCDataLoader:
             logger.error(f"Failed to download SGCC dataset: {e}")
             return False
     
-    def create_synthetic_sgcc_data(self) -> bool:
+    def load_real_sgcc_data(self, filename: str = "datasetsmall.csv") -> pd.DataFrame:
         """
-        Create synthetic SGCC-like dataset for development/testing
-        This mimics the real SGCC dataset structure and characteristics
+        Load real SGCC dataset from CSV file
+        
+        Args:
+            filename: Name of the SGCC dataset file
+            
+        Returns:
+            DataFrame in wide format as loaded from CSV
         """
         try:
-            logger.info("Creating synthetic SGCC-like dataset...")
+            logger.info(f"Loading real SGCC dataset from {filename}...")
             
-            # Dataset parameters matching SGCC
-            n_users = 1000  # Reduced for development (real: 42,372)
-            n_days = 365    # Reduced for development (real: 1,035)
-            theft_rate = 0.085  # 8.5% theft rate
-            missing_rate = 0.25  # 25% missing data rate
+            # Load the dataset
+            data_file = self.data_path / filename
+            if not data_file.exists():
+                raise FileNotFoundError(f"Dataset file not found: {data_file}")
             
-            # Generate user IDs
-            user_ids = [f"METER_{str(i).zfill(6)}" for i in range(1, n_users + 1)]
+            # Read CSV with proper handling
+            df_raw = pd.read_csv(data_file, low_memory=False)
             
-            # Determine theft users (8.5% of total)
-            n_theft_users = int(n_users * theft_rate)
-            theft_users = np.random.choice(user_ids, size=n_theft_users, replace=False)
+            logger.info(f"Raw dataset loaded: {len(df_raw)} meters, {len(df_raw.columns)} columns")
             
-            # Generate consumption data
-            data = []
-            dates = pd.date_range(start='2024-01-01', periods=n_days, freq='D')
+            # Basic validation
+            if 'CONS_NO' not in df_raw.columns:
+                raise ValueError("Dataset must contain 'CONS_NO' column")
+            if 'FLAG' not in df_raw.columns:
+                raise ValueError("Dataset must contain 'FLAG' column")
             
-            for user_id in user_ids:
-                is_theft = user_id in theft_users
-                
-                for date in dates:
-                    # Generate realistic consumption patterns
-                    base_consumption = self._generate_consumption_pattern(date, is_theft)
-                    
-                    # Add missing values (25% missing rate)
-                    if np.random.random() < missing_rate:
-                        consumption = np.nan
-                    else:
-                        consumption = base_consumption
-                    
-                    data.append({
-                        'meter_id': user_id,
-                        'date': date.strftime('%Y-%m-%d'),
-                        'consumption': consumption,
-                        'label': 1 if is_theft else 0  # 1 = theft, 0 = normal
-                    })
+            # Get dataset statistics
+            total_meters = len(df_raw)
+            theft_meters = df_raw['FLAG'].sum()
+            normal_meters = total_meters - theft_meters
+            theft_rate = (theft_meters / total_meters) * 100
             
-            # Create DataFrame
-            df = pd.DataFrame(data)
+            logger.success(f"SGCC dataset loaded successfully:")
+            logger.info(f"  - Total meters: {total_meters:,}")
+            logger.info(f"  - Normal meters: {normal_meters:,} ({100-theft_rate:.1f}%)")
+            logger.info(f"  - Theft meters: {theft_meters:,} ({theft_rate:.1f}%)")
+            logger.info(f"  - Date columns: {len(df_raw.columns) - 2}")
             
-            # Save dataset
-            self.data_path.mkdir(parents=True, exist_ok=True)
-            df.to_csv(self.data_path / "sgcc_synthetic_dataset.csv", index=False)
-            
-            # Save metadata
-            metadata = {
-                'total_users': n_users,
-                'total_days': n_days,
-                'theft_users': n_theft_users,
-                'theft_rate': theft_rate,
-                'missing_rate': missing_rate,
-                'total_records': len(data),
-                'date_range': f"{dates[0].strftime('%Y-%m-%d')} to {dates[-1].strftime('%Y-%m-%d')}"
-            }
-            
-            pd.DataFrame([metadata]).to_csv(self.data_path / "dataset_metadata.csv", index=False)
-            
-            logger.success(f"Synthetic SGCC dataset created: {len(data)} records")
-            logger.info(f"Normal users: {n_users - n_theft_users}, Theft users: {n_theft_users}")
-            
-            return True
+            return df_raw
             
         except Exception as e:
-            logger.error(f"Failed to create synthetic dataset: {e}")
-            return False
+            logger.error(f"Failed to load real SGCC dataset: {e}")
+            raise
     
-    def _generate_consumption_pattern(self, date: pd.Timestamp, is_theft: bool) -> float:
-        """Generate realistic consumption patterns"""
-        
-        # Base consumption based on day of week and season
-        day_of_week = date.dayofweek
-        month = date.month
-        
-        # Weekly pattern (lower on weekends for residential)
-        if day_of_week < 5:  # Weekday
-            base = 25.0
-        else:  # Weekend
-            base = 22.0
-            
-        # Seasonal variation
-        if month in [12, 1, 2]:  # Winter (higher heating)
-            seasonal_factor = 1.3
-        elif month in [6, 7, 8]:  # Summer (higher cooling)
-            seasonal_factor = 1.2
-        else:
-            seasonal_factor = 1.0
-            
-        base *= seasonal_factor
-        
-        # Add random variation
-        noise = np.random.normal(0, 3)
-        consumption = base + noise
-        
-        # Theft pattern: significantly lower consumption
-        if is_theft:
-            # Theft users consume 40-70% of normal
-            theft_factor = np.random.uniform(0.4, 0.7)
-            consumption *= theft_factor
-            
-            # Add more irregular patterns for theft
-            if np.random.random() < 0.1:  # 10% chance of very low reading
-                consumption *= np.random.uniform(0.1, 0.3)
-        
-        # Ensure positive consumption
-        consumption = max(0.1, consumption)
-        
-        return round(consumption, 2)
     
-    def load_dataset(self, use_synthetic: bool = True) -> Tuple[pd.DataFrame, Dict]:
+    def load_dataset(self, filename: str = "datasetsmall.csv") -> Tuple[pd.DataFrame, Dict]:
         """
-        Load SGCC dataset (real or synthetic)
+        Load SGCC dataset and convert to long format
         
+        Args:
+            filename: Name of the SGCC dataset file
+            
         Returns:
-            Tuple of (DataFrame, metadata_dict)
+            Tuple of (DataFrame in long format, metadata_dict)
         """
         try:
-            if use_synthetic:
-                # Check if synthetic data exists, create if not
-                synthetic_file = self.data_path / "sgcc_synthetic_dataset.csv"
-                if not synthetic_file.exists():
-                    logger.info("Synthetic dataset not found, creating...")
-                    self.create_synthetic_sgcc_data()
-                
-                df = pd.read_csv(synthetic_file)
-                metadata_file = self.data_path / "dataset_metadata.csv"
-                metadata = pd.read_csv(metadata_file).iloc[0].to_dict()
-                
-            else:
-                # Try to load real SGCC dataset
-                csv_files = list(self.data_path.glob("*.csv"))
-                if not csv_files:
-                    logger.warning("Real SGCC dataset not found, downloading...")
-                    if not self.download_dataset():
-                        raise FileNotFoundError("Could not download SGCC dataset")
-                
-                # Load the main dataset file
-                data_file = next((f for f in csv_files if "consumption" in f.name.lower()), csv_files[0])
-                df = pd.read_csv(data_file)
-                metadata = {"source": "real_sgcc", "file": str(data_file)}
+            # Load raw data in wide format
+            df_raw = self.load_real_sgcc_data(filename)
             
-            logger.success(f"Dataset loaded: {len(df)} records, {df['meter_id'].nunique()} unique meters")
+            # Convert from wide format to long format
+            df_long = self.convert_sgcc_wide_to_long(df_raw)
             
-            return df, metadata
+            # Create metadata
+            metadata = {
+                "source": "real_sgcc",
+                "filename": filename,
+                "original_format": "wide", 
+                "total_meters": len(df_raw),
+                "total_days": len(df_raw.columns) - 2,
+                "total_records": len(df_long),
+                "theft_rate": (df_raw['FLAG'].sum() / len(df_raw)) * 100,
+                "date_range": self._extract_date_range(df_raw)
+            }
+            
+            logger.success(f"Dataset converted to long format: {len(df_long):,} records, {df_long['meter_id'].nunique():,} unique meters")
+            
+            return df_long, metadata
             
         except Exception as e:
             logger.error(f"Failed to load dataset: {e}")
@@ -252,6 +181,135 @@ class SGCCDataLoader:
         
         return info
     
+    def convert_sgcc_wide_to_long(self, df_raw: pd.DataFrame) -> pd.DataFrame:
+        """
+        Convert SGCC dataset from wide format (days as columns) to long format
+        
+        Args:
+            df_raw: Raw SGCC dataframe with consumption days as columns
+            
+        Returns:
+            Long format dataframe with date, meter_id, consumption, label columns
+        """
+        logger.info("Converting wide format SGCC data to long format...")
+        
+        # Get date columns (all except last 2 which are CONS_NO and FLAG)
+        date_columns = df_raw.columns[:-2].tolist()
+        
+        # Create a copy and rename identifier columns
+        df_work = df_raw.copy()
+        df_work = df_work.rename(columns={'CONS_NO': 'meter_id', 'FLAG': 'label'})
+        
+        # Melt the dataframe to convert from wide to long format
+        df_long = pd.melt(
+            df_work,
+            id_vars=['meter_id', 'label'],
+            value_vars=date_columns,
+            var_name='date',
+            value_name='consumption'
+        )
+        
+        # Convert date strings to datetime with improved parsing
+        logger.info("Parsing date columns...")
+        
+        def parse_date_column(date_str):
+            """Parse various date formats in the dataset"""
+            try:
+                # Try MM/DD/YYYY first
+                if '/' in date_str:
+                    return pd.to_datetime(date_str, format='%m/%d/%Y', errors='coerce')
+                else:
+                    return pd.to_datetime(date_str, errors='coerce')
+            except:
+                return pd.NaT
+        
+        df_long['date'] = df_long['date'].apply(parse_date_column)
+        
+        # Handle any dates that couldn't be parsed
+        failed_dates = df_long['date'].isna().sum()
+        if failed_dates > 0:
+            logger.warning(f"Could not parse {failed_dates} date entries, creating sequential dates")
+            
+            # For failed dates, create sequential dates starting from 2014-01-01
+            unique_dates = sorted(df_long['date'].dropna().unique())
+            if len(unique_dates) > 0:
+                start_date = min(unique_dates)
+            else:
+                start_date = pd.to_datetime('2014-01-01')
+            
+            # Fill missing dates sequentially
+            date_mapping = {}
+            for i, col in enumerate(date_columns):
+                if df_long[df_long['date'].notna() & (df_long['date'] == parse_date_column(col))].empty:
+                    date_mapping[col] = start_date + pd.Timedelta(days=i)
+            
+            for idx, row in df_long[df_long['date'].isna()].iterrows():
+                original_date = row['date']
+                if pd.isna(original_date):
+                    # Find the original column name from the melted data
+                    original_col = date_columns[idx % len(date_columns)]
+                    if original_col in date_mapping:
+                        df_long.loc[idx, 'date'] = date_mapping[original_col]
+        
+        # Convert consumption to numeric, handling various formats
+        logger.info("Converting consumption values to numeric...")
+        df_long['consumption'] = pd.to_numeric(df_long['consumption'], errors='coerce')
+        
+        # Handle zero consumption (keep as is, might be legitimate)
+        zero_consumption = (df_long['consumption'] == 0).sum()
+        logger.info(f"Found {zero_consumption:,} zero consumption readings")
+        
+        # Remove rows with missing consumption values
+        initial_len = len(df_long)
+        df_long = df_long.dropna(subset=['consumption'])
+        removed = initial_len - len(df_long)
+        if removed > 0:
+            logger.info(f"Removed {removed:,} rows with missing consumption values")
+        
+        # Sort by meter_id and date
+        df_long = df_long.sort_values(['meter_id', 'date']).reset_index(drop=True)
+        
+        # Final statistics
+        logger.success(f"Converted to long format: {len(df_long):,} records")
+        logger.info(f"Date range: {df_long['date'].min()} to {df_long['date'].max()}")
+        logger.info(f"Unique meters: {df_long['meter_id'].nunique():,}")
+        logger.info(f"Consumption range: {df_long['consumption'].min():.2f} to {df_long['consumption'].max():.2f}")
+        
+        return df_long
+    
+    def _extract_date_range(self, df_raw: pd.DataFrame) -> Dict:
+        """Extract date range information from wide format dataset"""
+        try:
+            date_columns = df_raw.columns[:-2].tolist()
+            
+            # Parse first and last date columns
+            start_date_str = date_columns[0]
+            end_date_str = date_columns[-1]
+            
+            start_date = pd.to_datetime(start_date_str, format='%m/%d/%Y', errors='coerce')
+            end_date = pd.to_datetime(end_date_str, format='%m/%d/%Y', errors='coerce')
+            
+            if pd.isna(start_date) or pd.isna(end_date):
+                return {
+                    'start': start_date_str,
+                    'end': end_date_str,
+                    'days': len(date_columns)
+                }
+            
+            return {
+                'start': start_date.strftime('%Y-%m-%d'),
+                'end': end_date.strftime('%Y-%m-%d'),
+                'days': len(date_columns),
+                'duration_days': (end_date - start_date).days + 1
+            }
+        except Exception as e:
+            logger.warning(f"Could not extract date range: {e}")
+            return {
+                'start': 'unknown',
+                'end': 'unknown', 
+                'days': len(df_raw.columns) - 2
+            }
+
     def prepare_time_series_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Prepare data for time series analysis
@@ -292,7 +350,7 @@ class SGCCDataLoader:
 
 
 # Utility functions
-def load_sgcc_data(use_synthetic: bool = True) -> Tuple[pd.DataFrame, Dict]:
+def load_sgcc_data(filename: str = "datasetsmall.csv") -> Tuple[pd.DataFrame, Dict]:
     """Convenience function to load SGCC dataset"""
     loader = SGCCDataLoader()
-    return loader.load_dataset(use_synthetic=use_synthetic)
+    return loader.load_dataset(filename=filename)

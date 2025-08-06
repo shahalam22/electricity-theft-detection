@@ -28,7 +28,7 @@ def main():
         
         # Step 1: Load dataset (create synthetic if real not available)
         logger.info("Step 1: Loading SGCC dataset...")
-        df, metadata = data_loader.load_dataset(use_synthetic=True)
+        df, metadata = data_loader.load_dataset(use_synthetic=False)
         
         # Step 2: Initial validation
         logger.info("Step 2: Validating raw data...")

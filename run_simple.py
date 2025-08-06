@@ -370,10 +370,10 @@ async def explain_alert(alert_id: int):
     }
 
 if __name__ == "__main__":
-    print("🚀 Starting Electricity Theft Detection System (Demo Mode)")
-    print("📊 Dashboard will be available at: http://localhost:3000")
-    print("🔧 API Documentation: http://localhost:8000/api/docs")
-    print("⚡ Backend API: http://localhost:8000")
+    print("Starting Electricity Theft Detection System (Demo Mode)")
+    print("Dashboard will be available at: http://localhost:3000")
+    print("API Documentation: http://localhost:8000/api/docs")
+    print("Backend API: http://localhost:8000")
     
     uvicorn.run(
         "run_simple:app",

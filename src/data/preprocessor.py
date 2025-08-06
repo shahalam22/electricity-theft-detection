@@ -323,17 +323,34 @@ class ElectricityDataPreprocessor:
         return (meter_counts < min_days).sum()
     
     def _check_date_gaps(self, df: pd.DataFrame) -> Dict:
-        """Check for date gaps in time series data"""
+        """Check for date gaps in time series data (optimized for large datasets)"""
         gaps_info = {'meters_with_gaps': 0, 'total_gaps': 0}
         
-        for meter_id in df['meter_id'].unique():
-            meter_data = df[df['meter_id'] == meter_id].sort_values('date')
+        # For large datasets, sample a subset for performance
+        unique_meters = df['meter_id'].unique()
+        if len(unique_meters) > 1000:
+            logger.info(f"Large dataset ({len(unique_meters)} meters), sampling 1000 meters for gap analysis")
+            import numpy as np
+            sample_meters = np.random.choice(unique_meters, size=1000, replace=False)
+            sample_df = df[df['meter_id'].isin(sample_meters)]
+        else:
+            sample_df = df
+            sample_meters = unique_meters
+        
+        for meter_id in sample_meters:
+            meter_data = sample_df[sample_df['meter_id'] == meter_id].sort_values('date')
             if len(meter_data) > 1:
                 date_diffs = meter_data['date'].diff().dt.days
                 gaps = (date_diffs > 1).sum()
                 if gaps > 0:
                     gaps_info['meters_with_gaps'] += 1
                     gaps_info['total_gaps'] += gaps
+        
+        # Scale up results if we sampled
+        if len(unique_meters) > 1000:
+            scale_factor = len(unique_meters) / len(sample_meters)
+            gaps_info['meters_with_gaps'] = int(gaps_info['meters_with_gaps'] * scale_factor)
+            gaps_info['total_gaps'] = int(gaps_info['total_gaps'] * scale_factor)
         
         return gaps_info
     

@@ -248,12 +248,20 @@ class DataValidator:
                     results['valid'] = False
                     return results
             
-            # Check for date gaps per meter
+            # Check for date gaps per meter (optimized for large datasets)
             meters_with_gaps = 0
             total_gaps = 0
             large_gaps = 0
             
-            for meter_id in df_temp['meter_id'].unique():
+            # Sample a subset for performance with large datasets
+            unique_meters = df_temp['meter_id'].unique()
+            if len(unique_meters) > 1000:
+                logger.info(f"Large dataset ({len(unique_meters)} meters), sampling 1000 meters for continuity check")
+                sample_meters = np.random.choice(unique_meters, size=1000, replace=False)
+            else:
+                sample_meters = unique_meters
+            
+            for meter_id in sample_meters:
                 meter_data = df_temp[df_temp['meter_id'] == meter_id].sort_values('date')
                 if len(meter_data) > 1:
                     date_diffs = meter_data['date'].diff().dt.days
@@ -263,6 +271,13 @@ class DataValidator:
                         meters_with_gaps += 1
                         total_gaps += len(gaps)
                         large_gaps += (gaps > 7).sum()  # Gaps larger than 1 week
+            
+            # Scale up results if we sampled
+            if len(unique_meters) > 1000:
+                scale_factor = len(unique_meters) / len(sample_meters)
+                meters_with_gaps = int(meters_with_gaps * scale_factor)
+                total_gaps = int(total_gaps * scale_factor)
+                large_gaps = int(large_gaps * scale_factor)
             
             if meters_with_gaps > 0:
                 results['warnings'].append(f"{meters_with_gaps} meters have date gaps")

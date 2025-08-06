@@ -71,6 +71,18 @@ htmlcov/
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 
+# Node.js / Frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+frontend/dist/
+frontend/build/
+
 # Docker
 .docker/
 
