@@ -1,0 +1,146 @@
+API - /
+
+
+API - /health
+
+
+API - /model/info
+
+
+API - /api/v1/data/meters/register
+JSON - 
+  {
+    "meter_id": "TEST_002",
+    "customer_name": "ABC Manufacturing",
+    "location": "456 Industrial Ave",
+    "area": "Zone B",
+    "customer_type": "commercial"
+  }
+
+
+API - /api/v1/data/meters
+JSON -
+    limit - koyta dekhte chai
+    offset - koto theke start korbo
+
+
+API - /api/v1/data/meters/{meter_id}
+JSON - 
+    meter_id - meter er id diye test
+
+
+API - /api/v1/predict/single
+JSON -
+    LOW prediction - 
+      {
+        "meter_id": "M000018",
+        "consumption_data": [
+          {"date": "2024-01-01", "consumption": 400.0},
+          {"date": "2024-01-02", "consumption": 420.0},
+          {"date": "2024-01-03", "consumption": 380.0},
+          {"date": "2024-01-04", "consumption": 410.0},
+          {"date": "2024-01-05", "consumption": 390.0},
+          {"date": "2024-01-06", "consumption": 400.0},
+          {"date": "2024-01-07", "consumption": 410.0}
+        ],
+        "include_explanation": true
+      }
+
+    MEDIUM prediction - 
+      {
+        "meter_id": "M000018",
+        "consumption_data": [
+          {"date": "2024-01-01", "consumption": 450.0},
+          {"date": "2024-01-02", "consumption": 430.0},
+          {"date": "2024-01-03", "consumption": 390.0},
+          {"date": "2024-01-04", "consumption": 390.0},
+          {"date": "2024-01-05", "consumption": 370.0},
+          {"date": "2024-01-06", "consumption": 380.0},
+          {"date": "2024-01-07", "consumption": 390.0}
+        ],
+        "include_explanation": true
+      }
+
+    HIGH prediction - 
+      {
+        "meter_id": "M000018",
+        "consumption_data": [
+          {"date": "2024-01-01", "consumption": 530.0},
+          {"date": "2024-01-02", "consumption": 550.0},
+          {"date": "2024-01-03", "consumption": 390.0},
+          {"date": "2024-01-04", "consumption": 400.0},
+          {"date": "2024-01-05", "consumption": 390.0},
+          {"date": "2024-01-06", "consumption": 410.0},
+          {"date": "2024-01-07", "consumption": 405.0}
+        ],
+        "include_explanation": true
+      }
+
+      {
+        "meter_id": "M000018",
+        "consumption_data": [
+          {"date": "2024-01-01", "consumption": 530.0},
+          {"date": "2024-01-02", "consumption": 390.0},
+          {"date": "2024-01-03", "consumption": 520.0},
+          {"date": "2024-01-04", "consumption": 400.0},
+          {"date": "2024-01-05", "consumption": 510.0},
+          {"date": "2024-01-06", "consumption": 515.0},
+          {"date": "2024-01-07", "consumption": 405.0}
+        ],
+        "include_explanation": true
+      }
+
+    CRITICAL prediction -
+      {
+        "meter_id": "M000018",
+        "consumption_data": [
+          {"date": "2024-01-01", "consumption": 750.0},
+          {"date": "2024-01-02", "consumption": 390.0},
+          {"date": "2024-01-03", "consumption": 780.0},
+          {"date": "2024-01-04", "consumption": 400.0},
+          {"date": "2024-01-05", "consumption": 410.0},
+          {"date": "2024-01-06", "consumption": 415.0},
+          {"date": "2024-01-07", "consumption": 405.0}
+        ],
+        "include_explanation": true
+      }
+
+
+API - /api/v1/alerts/
+JSON - 
+    limit - kotogulo dekhte chai
+    offset - koto number theke dekhte chai
+    status - pending/confirmed/rejected
+    risk_level - LOW/MEDIUM/HIGH/CRITICAL
+
+
+API - /api/v1/alerts/{alert_id}
+JSON - 
+    alert_id
+
+
+API - /api/v1/alerts/{alert_id}/confirm
+JSON - 
+    alert_id
+    {
+      "notes": "Field investigation confirmed tampering with meter connections"
+    }
+
+
+API - /api/v1/alerts/{alert_id}/reject
+JSON - 
+    alert_id
+    {
+      "notes": "False positive - high consumption due to pool heating system"
+    }
+
+
+API - /api/v1/alerts/dashboard/summary
+
+
+API - /api/v1/explain/alert/{alert_id}
+JSON - 
+    alert_id
+
+
+API - /api/v1/system/stats
