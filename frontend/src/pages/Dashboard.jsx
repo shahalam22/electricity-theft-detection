@@ -69,6 +69,7 @@ const MetricCard = ({ title, value, change, changeType, icon: Icon, color = 'pri
             </div>
           )}
         </div>
+        
         <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
           <Icon className="h-8 w-8" />
         </div>
@@ -126,6 +127,7 @@ const Dashboard = () => {
 
   const summary = dashboardData?.data?.summary || {}
   const stats = systemStats?.data || {}
+
   const alerts = recentAlerts?.data?.alerts || []
 
   // Sample chart data (would come from API in real implementation)
@@ -172,6 +174,7 @@ const Dashboard = () => {
             Real-time monitoring of electricity theft detection system
           </p>
         </div>
+        
         <div className="flex items-center space-x-4">
           <div className="text-right">
             <p className="text-sm text-gray-500">Last Updated</p>
@@ -230,6 +233,7 @@ const Dashboard = () => {
                 <div className="w-3 h-3 bg-primary-500 rounded mr-2" />
                 <span>Detections</span>
               </div>
+              
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-warning-500 rounded mr-2" />
                 <span>Investigations</span>
@@ -400,14 +404,17 @@ const Dashboard = () => {
                 <span className="text-gray-600">Model Version</span>
                 <span className="font-medium">FA-XGBoost v2.1</span>
               </div>
+              
               <div className="flex justify-between">
                 <span className="text-gray-600">Last Training</span>
                 <span className="font-medium">2 days ago</span>
               </div>
+              
               <div className="flex justify-between">
                 <span className="text-gray-600">Accuracy</span>
                 <span className="font-medium text-success-600">94.2%</span>
               </div>
+              
               <div className="flex justify-between">
                 <span className="text-gray-600">Precision</span>
                 <span className="font-medium text-success-600">91.8%</span>

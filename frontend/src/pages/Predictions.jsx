@@ -51,6 +51,7 @@ const PredictionCard = ({ title, value, change, icon: Icon, color = 'primary', d
             <div className={`p-2 rounded-lg ${colorClasses[color]} mr-3`}>
               <Icon className="h-6 w-6" />
             </div>
+            
             <div>
               <p className="text-sm font-medium text-gray-600">{title}</p>
               <p className="text-2xl font-bold text-gray-900">{value}</p>
@@ -165,6 +166,7 @@ const SinglePredictionForm = ({ onSubmit, isLoading }) => {
 
 const BatchPredictionForm = ({ onSubmit, isLoading }) => {
   const [file, setFile] = useState(null)
+  
   const [dragActive, setDragActive] = useState(false)
 
   const handleSubmit = (e) => {
@@ -300,6 +302,7 @@ const PredictionResult = ({ result, onClose }) => {
           <div className="text-2xl font-bold text-gray-900">
             {(result.risk_score * 100).toFixed(1)}%
           </div>
+          
           <div className="text-sm text-gray-600">Risk Score</div>
         </div>
         
@@ -309,6 +312,7 @@ const PredictionResult = ({ result, onClose }) => {
           }`}>
             {result.risk_level}
           </span>
+          
           <div className="text-sm text-gray-600 mt-2">Risk Level</div>
         </div>
         
@@ -316,6 +320,7 @@ const PredictionResult = ({ result, onClose }) => {
           <div className="text-2xl font-bold text-gray-900">
             {(result.confidence * 100).toFixed(1)}%
           </div>
+          
           <div className="text-sm text-gray-600">Confidence</div>
         </div>
       </div>
@@ -431,6 +436,7 @@ const Predictions = () => {
             Run ML predictions to detect potential electricity theft
           </p>
         </div>
+        
         <div className="flex items-center space-x-4">
           <div className="text-right">
             <p className="text-sm text-gray-500">Model Status</p>
@@ -493,6 +499,7 @@ const Predictions = () => {
             >
               Single Prediction
             </button>
+            
             <button
               onClick={() => setActiveTab('batch')}
               className={`px-4 py-2 text-sm font-medium rounded-md ${
@@ -629,6 +636,7 @@ const Predictions = () => {
             <RefreshCwIcon className="h-6 w-6 text-primary-600 mr-3" />
             <div className="text-left">
               <div className="font-medium text-gray-900">Retrain Model</div>
+              
               <div className="text-sm text-gray-500">Update with latest data</div>
             </div>
           </button>
@@ -645,6 +653,7 @@ const Predictions = () => {
             <EyeIcon className="h-6 w-6 text-warning-600 mr-3" />
             <div className="text-left">
               <div className="font-medium text-gray-900">View History</div>
+              
               <div className="text-sm text-gray-500">Past prediction runs</div>
             </div>
           </button>

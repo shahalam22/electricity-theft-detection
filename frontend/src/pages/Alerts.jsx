@@ -34,7 +34,8 @@ const AlertStatusBadge = ({ status }) => {
 const RiskLevelBadge = ({ riskLevel }) => {
   const colorClass = apiUtils.getRiskLevelColor(riskLevel)
   
-  const icons = {
+  const icons = 
+  {
     'LOW': ClockIcon,
     'MEDIUM': AlertCircleIcon,
     'HIGH': AlertTriangleIcon,
@@ -294,6 +295,7 @@ const Alerts = () => {
 
   const alerts = alertsData?.data?.alerts || []
   const totalAlerts = alertsData?.data?.total || 0
+  
   const totalPages = Math.ceil(totalAlerts / pageSize)
 
   // Filtered alerts based on search term
@@ -323,7 +325,8 @@ const Alerts = () => {
 
   const isProcessing = confirmMutation.isLoading || rejectMutation.isLoading
 
-  if (error) {
+  if (error) 
+  {
     return (
       <div className="text-center py-12">
         <AlertTriangleIcon className="h-12 w-12 text-danger-500 mx-auto mb-4" />
@@ -375,6 +378,7 @@ const Alerts = () => {
             <div className="p-2 bg-success-100 rounded-lg">
               <CheckIcon className="h-6 w-6 text-success-600" />
             </div>
+           
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Confirmed</p>
               <p className="text-2xl font-bold text-gray-900">
@@ -403,6 +407,7 @@ const Alerts = () => {
             <div className="p-2 bg-primary-100 rounded-lg">
               <TrendingUpIcon className="h-6 w-6 text-primary-600" />
             </div>
+            
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total</p>
               <p className="text-2xl font-bold text-gray-900">{totalAlerts}</p>
@@ -515,6 +520,7 @@ const Alerts = () => {
                     Next
                   </button>
                 </div>
+                
                 <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                   <div>
                     <p className="text-sm text-gray-700">
@@ -525,6 +531,7 @@ const Alerts = () => {
                       of <span className="font-medium">{totalAlerts}</span> results
                     </p>
                   </div>
+                  
                   <div>
                     <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
                       <button

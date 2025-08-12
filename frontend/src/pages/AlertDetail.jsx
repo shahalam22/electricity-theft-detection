@@ -16,7 +16,8 @@ import {
   UserIcon,
   FileTextIcon,
   BarChart3Icon
-} from 'lucide-react'
+} 
+from 'lucide-react'
 import {
   LineChart,
   Line,
@@ -120,7 +121,8 @@ const AlertDetail = () => {
 
   const isProcessing = confirmMutation.isLoading || rejectMutation.isLoading
 
-  if (alertLoading) {
+  if (alertLoading) 
+  {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="loading-spinner" />
@@ -128,7 +130,8 @@ const AlertDetail = () => {
     )
   }
 
-  if (error || !alert) {
+  if (error || !alert) 
+  {
     return (
       <div className="text-center py-12">
         <AlertTriangleIcon className="h-12 w-12 text-danger-500 mx-auto mb-4" />

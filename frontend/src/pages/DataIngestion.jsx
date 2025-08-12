@@ -33,7 +33,8 @@ import toast from 'react-hot-toast'
 const UploadCard = ({ title, description, icon: Icon, color, onUpload, isLoading, accept, multiple = false }) => {
   const [dragActive, setDragActive] = useState(false)
 
-  const colorClasses = {
+  const colorClasses = 
+  {
     primary: 'border-primary-300 bg-primary-50 text-primary-600',
     success: 'border-success-300 bg-success-50 text-success-600',
     warning: 'border-warning-300 bg-warning-50 text-warning-600',
@@ -100,6 +101,7 @@ const UploadCard = ({ title, description, icon: Icon, color, onUpload, isLoading
             />
           </label>
         </p>
+        
         <p className="text-xs text-gray-500">
           {accept === '.csv' ? 'CSV files only' : 'Excel or CSV files'}
         </p>
@@ -553,6 +555,7 @@ const DataIngestion = () => {
             Manage meter registrations and consumption data uploads
           </p>
         </div>
+        
         <div className="flex items-center space-x-4">
           <button className="btn-secondary">
             <DownloadIcon className="h-4 w-4 mr-2" />
@@ -572,6 +575,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-primary-100 rounded-lg">
               <ZapIcon className="h-6 w-6 text-primary-600" />
             </div>
+            
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Meters</p>
               <p className="text-2xl font-bold text-gray-900">{apiUtils.formatNumber(meters.length)}</p>
@@ -584,6 +588,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-success-100 rounded-lg">
               <UploadIcon className="h-6 w-6 text-success-600" />
             </div>
+            
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Data Uploads</p>
               <p className="text-2xl font-bold text-gray-900">1,247</p>
@@ -596,6 +601,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-warning-100 rounded-lg">
               <AlertTriangleIcon className="h-6 w-6 text-warning-600" />
             </div>
+           
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Upload Errors</p>
               <p className="text-2xl font-bold text-gray-900">8</p>
@@ -608,6 +614,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-danger-100 rounded-lg">
               <DatabaseIcon className="h-6 w-6 text-danger-600" />
             </div>
+            
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Data Quality</p>
               <p className="text-2xl font-bold text-gray-900">98.5%</p>
