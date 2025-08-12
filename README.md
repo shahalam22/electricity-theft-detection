@@ -914,3 +914,8 @@ npm run preview # Preview production build
 Built for **real-world electricity theft detection**! ⚡
 
 > **💡 Tip**: Visit http://localhost:8000/api/docs when running for complete interactive API documentation
+
+Developer Information
+Name : Md. Touhidur Rahman
+Roll : BSSE 1434
+Email : bsse1434@iit.du.ac.bd
