@@ -301,6 +301,7 @@ const MeterRegistrationForm = ({ onSubmit, isLoading }) => {
               <option value="agricultural">Agricultural</option>
             </select>
           </div>
+       
         </div>
         
         <div className="flex justify-end space-x-3 pt-4">
@@ -337,6 +338,7 @@ const MeterRegistrationForm = ({ onSubmit, isLoading }) => {
 const MeterList = ({ meters, isLoading, onRefresh }) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+
   const itemsPerPage = 10
 
   const filteredMeters = meters.filter(meter =>
@@ -428,6 +430,7 @@ const MeterList = ({ meters, isLoading, onRefresh }) => {
                 {Math.min(currentPage * itemsPerPage, filteredMeters.length)} of{' '}
                 {filteredMeters.length} results
               </div>
+             
               <div className="flex space-x-2">
                 <button
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
@@ -436,6 +439,7 @@ const MeterList = ({ meters, isLoading, onRefresh }) => {
                 >
                   Previous
                 </button>
+              
                 <button
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
@@ -553,11 +557,13 @@ const DataIngestion = () => {
             Manage meter registrations and consumption data uploads
           </p>
         </div>
+      
         <div className="flex items-center space-x-4">
           <button className="btn-secondary">
             <DownloadIcon className="h-4 w-4 mr-2" />
             Export Data
           </button>
+         
           <button className="btn-secondary">
             <BarChart3Icon className="h-4 w-4 mr-2" />
             View Reports
@@ -572,6 +578,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-primary-100 rounded-lg">
               <ZapIcon className="h-6 w-6 text-primary-600" />
             </div>
+         
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Meters</p>
               <p className="text-2xl font-bold text-gray-900">{apiUtils.formatNumber(meters.length)}</p>
@@ -584,6 +591,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-success-100 rounded-lg">
               <UploadIcon className="h-6 w-6 text-success-600" />
             </div>
+           
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Data Uploads</p>
               <p className="text-2xl font-bold text-gray-900">1,247</p>
@@ -596,6 +604,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-warning-100 rounded-lg">
               <AlertTriangleIcon className="h-6 w-6 text-warning-600" />
             </div>
+           
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Upload Errors</p>
               <p className="text-2xl font-bold text-gray-900">8</p>
@@ -608,6 +617,7 @@ const DataIngestion = () => {
             <div className="p-2 bg-danger-100 rounded-lg">
               <DatabaseIcon className="h-6 w-6 text-danger-600" />
             </div>
+           
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Data Quality</p>
               <p className="text-2xl font-bold text-gray-900">98.5%</p>
@@ -629,6 +639,7 @@ const DataIngestion = () => {
           >
             Data Upload
           </button>
+        
           <button
             onClick={() => setActiveTab('register')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -639,6 +650,7 @@ const DataIngestion = () => {
           >
             Meter Registration
           </button>
+         
           <button
             onClick={() => setActiveTab('manage')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${

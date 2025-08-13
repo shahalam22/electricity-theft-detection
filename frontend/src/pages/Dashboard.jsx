@@ -48,6 +48,7 @@ const MetricCard = ({ title, value, change, changeType, icon: Icon, color = 'pri
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
+          
           <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
           {change !== undefined && (
             <div className="flex items-center mt-2">
@@ -69,6 +70,7 @@ const MetricCard = ({ title, value, change, changeType, icon: Icon, color = 'pri
             </div>
           )}
         </div>
+       
         <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
           <Icon className="h-8 w-8" />
         </div>
@@ -96,6 +98,7 @@ const RecentAlert = ({ alert }) => (
         {apiUtils.parseDate(alert.created_at)?.toLocaleString()}
       </p>
     </div>
+   
     <div className="ml-4">
       <button className="btn-primary text-sm">
         View Details
@@ -172,6 +175,7 @@ const Dashboard = () => {
             Real-time monitoring of electricity theft detection system
           </p>
         </div>
+       
         <div className="flex items-center space-x-4">
           <div className="text-right">
             <p className="text-sm text-gray-500">Last Updated</p>
@@ -179,6 +183,7 @@ const Dashboard = () => {
               {new Date().toLocaleTimeString()}
             </p>
           </div>
+        
           <div className="w-3 h-3 bg-success-500 rounded-full animate-pulse" />
         </div>
       </div>
@@ -230,10 +235,12 @@ const Dashboard = () => {
                 <div className="w-3 h-3 bg-primary-500 rounded mr-2" />
                 <span>Detections</span>
               </div>
+             
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-warning-500 rounded mr-2" />
                 <span>Investigations</span>
               </div>
+             
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-danger-500 rounded mr-2" />
                 <span>Confirmed</span>
