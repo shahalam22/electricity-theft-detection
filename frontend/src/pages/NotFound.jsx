@@ -9,6 +9,7 @@ const NotFound = () => {
         {/* 404 Illustration */}
         <div className="mb-8">
           <div className="text-9xl font-bold text-primary-200 mb-4">404</div>
+         
           <div className="relative">
             <SearchIcon className="h-16 w-16 text-gray-300 mx-auto" />
             <div className="absolute inset-0 flex items-center justify-center">

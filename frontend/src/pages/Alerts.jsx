@@ -59,10 +59,12 @@ const AlertRow = ({ alert, onConfirm, onReject, isProcessing }) => {
           <div className="flex-shrink-0">
             <AlertTriangleIcon className="h-8 w-8 text-warning-500" />
           </div>
+         
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900">
               Meter {alert.meter_id}
             </div>
+          
             <div className="text-sm text-gray-500">
               ID: {alert.id}
             </div>
@@ -84,10 +86,12 @@ const AlertRow = ({ alert, onConfirm, onReject, isProcessing }) => {
       </td>
       
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+      
         <div className="flex items-center">
           <MapPinIcon className="h-4 w-4 text-gray-400 mr-1" />
           {alert.location || 'Unknown'}
         </div>
+       
         <div className="text-gray-500 mt-1">
           Area: {alert.area || 'N/A'}
         </div>
@@ -98,6 +102,7 @@ const AlertRow = ({ alert, onConfirm, onReject, isProcessing }) => {
           <CalendarIcon className="h-4 w-4 mr-1" />
           {apiUtils.parseDate(alert.created_at)?.toLocaleDateString()}
         </div>
+       
         <div className="mt-1">
           {apiUtils.parseDate(alert.created_at)?.toLocaleTimeString()}
         </div>
@@ -213,6 +218,7 @@ const FilterPanel = ({ filters, onFiltersChange, onClose }) => {
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Location/Area
         </label>
+      
         <input
           type="text"
           value={filters.location || ''}
@@ -343,6 +349,7 @@ const Alerts = () => {
             Monitor and manage electricity theft alerts
           </p>
         </div>
+       
         <div className="flex items-center space-x-4">
           <button
             onClick={handleExport}
@@ -361,6 +368,7 @@ const Alerts = () => {
             <div className="p-2 bg-warning-100 rounded-lg">
               <ClockIcon className="h-6 w-6 text-warning-600" />
             </div>
+           
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Pending</p>
               <p className="text-2xl font-bold text-gray-900">

@@ -120,7 +120,8 @@ const AlertDetail = () => {
 
   const isProcessing = confirmMutation.isLoading || rejectMutation.isLoading
 
-  if (alertLoading) {
+  if (alertLoading) 
+  {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="loading-spinner" />
@@ -156,6 +157,7 @@ const AlertDetail = () => {
             <ArrowLeftIcon className="h-4 w-4 mr-2" />
             Back to Alerts
           </button>
+          
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               Alert #{alert.id}
@@ -176,6 +178,7 @@ const AlertDetail = () => {
               <XIcon className="h-4 w-4 mr-2" />
               Reject
             </button>
+          
             <button
               onClick={handleConfirm}
               disabled={isProcessing}
@@ -197,6 +200,7 @@ const AlertDetail = () => {
               <div className="p-3 bg-danger-100 rounded-lg">
                 <AlertTriangleIcon className="h-8 w-8 text-danger-600" />
               </div>
+          
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">
                   Electricity Theft Detection
@@ -223,6 +227,7 @@ const AlertDetail = () => {
               <div className="text-2xl font-bold text-gray-900">
                 {(alert.risk_score * 100).toFixed(1)}%
               </div>
+          
               <div className="text-sm text-gray-600">Risk Score</div>
             </div>
             
@@ -231,19 +236,23 @@ const AlertDetail = () => {
               <div className="text-2xl font-bold text-gray-900">
                 {(alert.confidence * 100).toFixed(1)}%
               </div>
+          
               <div className="text-sm text-gray-600">Confidence</div>
             </div>
             
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <DollarSignIcon className="h-6 w-6 text-warning-600 mx-auto mb-2" />
+            
               <div className="text-2xl font-bold text-gray-900">
                 {apiUtils.formatCurrency(alert.estimated_loss)}
               </div>
+            
               <div className="text-sm text-gray-600">Est. Loss</div>
             </div>
             
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <ZapIcon className="h-6 w-6 text-success-600 mx-auto mb-2" />
+            
               <div className="text-2xl font-bold text-gray-900">
                 {alert.consumption_reduction}%
               </div>
@@ -258,6 +267,7 @@ const AlertDetail = () => {
                 <dt className="text-sm font-medium text-gray-600">Detection Method</dt>
                 <dd className="text-sm text-gray-900 mt-1">FA-XGBoost Algorithm</dd>
               </div>
+            
               <div>
                 <dt className="text-sm font-medium text-gray-600">Model Version</dt>
                 <dd className="text-sm text-gray-900 mt-1">v2.1.0</dd>
@@ -268,6 +278,7 @@ const AlertDetail = () => {
                   {apiUtils.parseDate(alert.created_at)?.toLocaleDateString()}
                 </dd>
               </div>
+            
               <div>
                 <dt className="text-sm font-medium text-gray-600">Analysis Period</dt>
                 <dd className="text-sm text-gray-900 mt-1">Last 30 days</dd>
@@ -288,14 +299,17 @@ const AlertDetail = () => {
                 <dt className="text-sm font-medium text-gray-600">Address</dt>
                 <dd className="text-sm text-gray-900 mt-1">{alert.location || 'Not specified'}</dd>
               </div>
+            
               <div>
                 <dt className="text-sm font-medium text-gray-600">Area</dt>
                 <dd className="text-sm text-gray-900 mt-1">{alert.area || 'Not specified'}</dd>
               </div>
+            
               <div>
                 <dt className="text-sm font-medium text-gray-600">Zone</dt>
                 <dd className="text-sm text-gray-900 mt-1">{alert.zone || 'Not specified'}</dd>
               </div>
+            
               <div>
                 <dt className="text-sm font-medium text-gray-600">Customer Type</dt>
                 <dd className="text-sm text-gray-900 mt-1">{alert.customer_type || 'Residential'}</dd>
@@ -313,14 +327,17 @@ const AlertDetail = () => {
                 <dt className="text-sm font-medium text-gray-600">Meter ID</dt>
                 <dd className="text-sm text-gray-900 mt-1 font-mono">{alert.meter_id}</dd>
               </div>
+             
               <div>
                 <dt className="text-sm font-medium text-gray-600">Installation Date</dt>
                 <dd className="text-sm text-gray-900 mt-1">2023-03-15</dd>
               </div>
+             
               <div>
                 <dt className="text-sm font-medium text-gray-600">Last Reading</dt>
                 <dd className="text-sm text-gray-900 mt-1">2024-06-01 09:30</dd>
               </div>
+             
               <div>
                 <dt className="text-sm font-medium text-gray-600">Connection Type</dt>
                 <dd className="text-sm text-gray-900 mt-1">Single Phase</dd>
@@ -399,6 +416,7 @@ const AlertDetail = () => {
                           />
                         </div>
                       </div>
+             
                       <div className="w-20 text-sm text-gray-900 text-right">
                         {(feature.importance * 100).toFixed(1)}%
                       </div>
@@ -483,12 +501,14 @@ const AlertDetail = () => {
                         <AlertTriangleIcon className="h-4 w-4 text-white" />
                       </span>
                     </div>
+             
                     <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                       <div>
                         <p className="text-sm text-gray-500">
                           Alert created by FA-XGBoost model
                         </p>
                       </div>
+              
                       <div className="text-right text-sm whitespace-nowrap text-gray-500">
                         {apiUtils.parseDate(alert.created_at)?.toLocaleString()}
                       </div>
@@ -508,6 +528,7 @@ const AlertDetail = () => {
                           <UserIcon className="h-4 w-4 text-white" />
                         </span>
                       </div>
+              
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div>
                           <p className="text-sm text-gray-500">
@@ -519,6 +540,7 @@ const AlertDetail = () => {
                             </div>
                           )}
                         </div>
+              
                         <div className="text-right text-sm whitespace-nowrap text-gray-500">
                           {apiUtils.parseDate(alert.updated_at)?.toLocaleString()}
                         </div>

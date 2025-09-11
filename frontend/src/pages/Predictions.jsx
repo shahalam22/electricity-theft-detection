@@ -51,6 +51,7 @@ const PredictionCard = ({ title, value, change, icon: Icon, color = 'primary', d
             <div className={`p-2 rounded-lg ${colorClasses[color]} mr-3`}>
               <Icon className="h-6 w-6" />
             </div>
+        
             <div>
               <p className="text-sm font-medium text-gray-600">{title}</p>
               <p className="text-2xl font-bold text-gray-900">{value}</p>
@@ -99,6 +100,7 @@ const SinglePredictionForm = ({ onSubmit, isLoading }) => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Meter ID
         </label>
+        
         <input
           type="text"
           name="meter_id"
@@ -206,6 +208,7 @@ const BatchPredictionForm = ({ onSubmit, isLoading }) => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Upload Meter List (CSV)
         </label>
+       
         <div
           className={`border-2 border-dashed rounded-lg p-6 text-center ${
             dragActive 
@@ -300,6 +303,7 @@ const PredictionResult = ({ result, onClose }) => {
           <div className="text-2xl font-bold text-gray-900">
             {(result.risk_score * 100).toFixed(1)}%
           </div>
+        
           <div className="text-sm text-gray-600">Risk Score</div>
         </div>
         
@@ -316,6 +320,7 @@ const PredictionResult = ({ result, onClose }) => {
           <div className="text-2xl font-bold text-gray-900">
             {(result.confidence * 100).toFixed(1)}%
           </div>
+         
           <div className="text-sm text-gray-600">Confidence</div>
         </div>
       </div>

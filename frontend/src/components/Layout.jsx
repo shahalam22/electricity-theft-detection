@@ -103,6 +103,7 @@ const Layout = ({ children }) => {
         <div className="absolute bottom-4 left-4 right-4">
           <div className="bg-gray-50 rounded-lg p-3">
             <div className="text-xs text-gray-500 mb-1">System Status</div>
+           
             <div className="flex items-center">
               <div className={`w-2 h-2 rounded-full mr-2 ${
                 systemInfo?.data?.status === 'healthy' ? 'bg-success-500' : 'bg-warning-500'
@@ -126,6 +127,7 @@ const Layout = ({ children }) => {
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex items-center">
+
               <button
                 className="lg:hidden"
                 onClick={() => setSidebarOpen(true)}
