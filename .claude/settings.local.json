@@ -3,7 +3,12 @@
     "allow": [
       "Bash(python:*)",
       "Bash(timeout:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Read(/G:\\Personal Projects\\Elecrticity fraud detection\\electricity-theft-detection\\frontend/**)",
+      "Read(/G:\\Personal Projects\\Elecrticity fraud detection\\electricity-theft-detection\\frontend/**)",
+      "Read(/G:\\Personal Projects\\Elecrticity fraud detection\\electricity-theft-detection\\frontend\\src/**)",
+      "Read(/G:\\Personal Projects\\Elecrticity fraud detection\\electricity-theft-detection\\frontend\\src/**)",
+      "Read(/G:\\Personal Projects\\Elecrticity fraud detection\\electricity-theft-detection\\frontend/**)"
     ],
     "deny": []
   }
